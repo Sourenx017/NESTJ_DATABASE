@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
-import { LoginDto } from '../dto/user.dto';
+import { LoginDto, CreateUserDto } from '../dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,11 +29,18 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
       user: user,
     };
-  }  async register(createUserDto: any) {
+  }  async register(createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
     const userObj = (user as any).toObject ? (user as any).toObject() : user;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = userObj;
-    return result;
+    
+    // Generate JWT token for the new user
+    const payload = { email: result.email, sub: result._id, privilege: result.privilege };
+    
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: result,
+    };
   }
 }
