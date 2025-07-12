@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 
 export type ProductDocument = Product & Document;
 
@@ -23,29 +23,11 @@ export class Product {
   @Prop({ default: 0 })
   stock: number;
 
-  @Prop([String])
+  @Prop({ type: [String], default: [] })
   images: string[];
 
   @Prop({ default: true })
   isActive: boolean;
-
-  @Prop()
-  model?: string;
-
-  @Prop()
-  color?: string;
-
-  @Prop()
-  material?: string;
-
-  @Prop()
-  size?: string;
-
-  @Prop({ default: 0 })
-  rating: number;
-
-  @Prop({ default: 0 })
-  reviewCount: number;
 
   @Prop({ default: Date.now })
   createdAt: Date;
